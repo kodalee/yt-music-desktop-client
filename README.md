@@ -61,7 +61,7 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-Since Google doesn't want to make a Desktop Client for their YouTube Music service which in turn requires people to use a browser, and Google Chrome is such as RAM hog! So I just made a client for this YT Music Service.
+Since Google doesn't want to make a Desktop Client for their YouTube Music service which in turn requires people to use a browser, and Google Chrome is such as RAM hog, I just went ahead and made a client for the YT Music Service myself.
 
 I do not own any of the logos displayed.
 
