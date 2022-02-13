@@ -120,8 +120,9 @@ const createWindow = () => {
 
     win.loadURL(`file://${__dirname}/src/index.html`)
 
-    win.once("close", () => {
-        app.quit();
+    win.once("close", e => {
+        win.webContents.send("signal-quit", {});
+        e.preventDefault(true)
     })
 }
 
@@ -129,4 +130,16 @@ const createWindow = () => {
 app.whenReady().then(() => {
     createWindow()
 })
+
+
+
+
+
+
+
+
+
+
+
+
 
