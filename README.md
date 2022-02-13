@@ -201,7 +201,8 @@ yt-music-desktop-client/
 ## Roadmap
 
 - [x] Integrate Discord RPC
-    - [ ] Fix Album Artwork Issues
+    - [x] Fix Album Artwork Issues
+      * Found to be a Discord API issue, turns out they update the asset server every 30 decades. Who would have known. Work around has been put into place
 - [ ] Finish the settings page and integration
     - [ ] Make settings.html look better
     - [ ] Locally store the settings via JSON in %appdata%
