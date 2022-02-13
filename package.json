@@ -1,0 +1,81 @@
+{
+  "name": "ytmusic",
+  "version": "1.0.1",
+  "description": "Desktop Application for YouTube Music",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "fstart": "electron start",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --x64",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "keywords": [
+    "koda",
+    "lee",
+    "allen",
+    "yt",
+    "YouTube",
+    "music"
+  ],
+  "author": "Koda Lee Allen",
+  "displayName": "YouTube Music",
+  "license": "MIT",
+  "devDependencies": {
+    "electron-builder": "^22.14.13",
+    "@electron-forge/cli": "^6.0.0-beta.63",
+    "@electron-forge/maker-deb": "^6.0.0-beta.63",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.63",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
+    "@electron-forge/maker-zip": "^6.0.0-beta.63",
+    "electron-builder-squirrel-windows": "^23.0.0-alpha.3",
+    "electron": "^15.1.1"
+  },
+  "dependencies": {
+    "axios": "^0.25.0",
+    "custom-electron-titlebar": "^4.0.1",
+    "discord-rich-presence": "0.0.8",
+    "electron-build": "0.0.3",
+    "electron-squirrel-startup": "^1.0.0"
+  },
+  "build": {
+    "win": {
+      "target": "squirrel"
+    },
+    "productName": "YouTube Music",
+    "appId": "life.koda.ytmusic",
+    "files": [
+      "css/**",
+      "js/**",
+      "eula.html",
+      "index.html",
+      "index.js",
+      "all_platform_logo_dark.svg",
+      "icon.png",
+      "update.gif",
+      "preload.js",
+      "settings.html"
+    ],
+    "directories": {
+      "buildResources": "."
+    },
+    "squirrelWindows": {
+      "loadingGif": "update.gif",
+      "useAppIdAsId": true
+    }
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "YouTube Music"
+          }
+        }
+      ]
+    }
+  }
+}
