@@ -31,12 +31,12 @@ const createWindow = () => {
     var currentData = null
     win.setTitle("Initializing... - YouTube Music")
     win.setMenuBarVisibility(false);
-    console.log("Loading... | "+`file://${__dirname}/index.html`)
+    console.log("Loading... | "+`file://${__dirname}/src/index.html`)
     win.once("ready-to-show", () => {
         win.show();
         console.log("Done! No more normal outputs. Only verbose and errors")
         ipcMain.on("injectReady", () => {
-            win.webContents.send("inject", {settings: `file://${__dirname}/settings.html`});
+            win.webContents.send("inject", {settings: `file://${__dirname}/src/settings.html`});
         });
 
         client.updatePresence({
@@ -118,7 +118,7 @@ const createWindow = () => {
         });
     })
 
-    win.loadURL(`file://${__dirname}/index.html`)
+    win.loadURL(`file://${__dirname}/src/index.html`)
 
     win.once("close", () => {
         app.quit();
