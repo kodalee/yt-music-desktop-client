@@ -86,6 +86,10 @@ SECURITY FLAGS ARE DISABLED, WHICH LEAVES YOUR SAFETY TO YOURSELF, DO NOT CLICK 
 
 To setup your own build of this client, just follow these steps.
 
+### Installation
+
+Download and launch YTMusicSetup.exe from the [releases](https://github.com/hellokoda/yt-music-desktop-client/releases/) page
+
 ### Prerequisites
 
 * NodeJS ^14.0.0 (LTS)
@@ -93,7 +97,7 @@ To setup your own build of this client, just follow these steps.
 * IDE (Visual Studio Code is a good canidate)
 * A Brain (pretty self explainatory)
 
-### Installation
+### Source Cloning
 
 1. Clone the repo
    ```cmd
