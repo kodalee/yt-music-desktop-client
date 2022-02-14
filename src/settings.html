@@ -2,8 +2,8 @@
 <html>
     <head>
         <title>Settings - YouTube Music</title>
-        <link type="text/css" rel="stylesheet" href="../css/settings.css" />
-        <link type="text/css" rel="stylesheet" href="../css/materialize.min.css"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="css/settings.css" />
+        <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
     </head>
     <body>
         <div class="logo-wrapper">
@@ -25,15 +25,15 @@
             </p>
             <a class="waves-effect waves-light btn btn-primary" href="javascript:appOpen()">Save and Exit</a>
         </div>
-        <script type="text/javascript" src="../js/materialize.min.js"></script>
-        <script type="text/javascript" src="../js/jquery.js"></script>
+        <script type="text/javascript" src="js/materialize.min.js"></script>
+        <script type="text/javascript" src="js/jquery.js"></script>
         <script>
             window.onload = function() {
                     document.body.style.opacity = 1;
             }
             function appOpen(){
                 document.body.style.opacity = 0;
-                setTimeout(() => {window.location = "index.html"}, 1000)
+                setTimeout(() => {window.location = "settings.html"}, 1000)
             }
         </script>
     </body>

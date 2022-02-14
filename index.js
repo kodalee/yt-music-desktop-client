@@ -23,7 +23,7 @@ const createWindow = () => {
             autoplayPolicy: false,
             webSecurity: false,
             nodeIntegration: true,
-            preload: path.join(app.getAppPath(), "preload.js"),
+            preload: path.join(app.getAppPath(), "src", "preload.js"),
         }
     })
 
@@ -31,7 +31,7 @@ const createWindow = () => {
     var currentData = null
     win.setTitle("Initializing... - YouTube Music")
     win.setMenuBarVisibility(false);
-    console.log("Loading... | "+`file://${__dirname}/src/index.html`)
+    console.log("Loading... | "+`file://${__dirname}/src/splash.html`)
     win.once("ready-to-show", () => {
         win.show();
         console.log("Done! No more normal outputs. Only verbose and errors")
@@ -118,7 +118,7 @@ const createWindow = () => {
         });
     })
 
-    win.loadURL(`file://${__dirname}/src/index.html`)
+    win.loadURL(`file://${__dirname}/src/splash.html`)
 
     win.once("close", e => {
         win.webContents.send("signal-quit", {});
