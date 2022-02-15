@@ -1,6 +1,6 @@
 {
   "name": "ytmusic",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Desktop Application for YouTube Music",
   "main": "index.js",
   "scripts": {
@@ -16,6 +16,7 @@
     "YouTube",
     "music"
   ],
+  "repository": "https://github.com/hellokoda/yt-music-desktop-client",
   "author": "Koda Lee Allen",
   "displayName": "YouTube Music",
   "license": "MIT",
@@ -43,12 +44,9 @@
     "productName": "YouTube Music",
     "appId": "life.koda.ytmusic",
     "files": [
-      "css/**",
-      "js/**",
       "src/**",
       "index.js",
-      "preload.js",
-      "settings.html"
+      "update.gif"
     ],
     "directories": {
       "buildResources": "."

@@ -1,11 +1,51 @@
-const client = require('discord-rich-presence')('942173523718324245');
-const axios = require('axios').default;
-const { app, BrowserWindow, ipcMain } = require('electron')
-const path = require("path");
+const { app, BrowserWindow, ipcMain, BrowserView, Menu } = require('electron')
+const client = require('discord-rich-presence')('942173523718324245')
+const axios = require('axios').default
+const path = require("path")
+const fs = require("fs")
+const { shell } = require('electron/common')
+const datafolder = path.join(process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share"), "YouTubeMusic");
+var PathTo = {
+    Settings: path.join(datafolder, "Settings.json")
+}
+var getFileObject = (file) => {
+    return JSON.parse(fs.readFileSync(file, {encoding:'utf8', flag:'r'}))
+}
 
+if(!fs.existsSync(PathTo.Settings)) {
+    fs.writeFileSync(PathTo.Settings, JSON.stringify({
+        discordRpc: {
+            enabled: true,
+            albumArtwork: true
+        }
+    }, null, 2))
+}
+else {
+    
+}
+var Logger = {
+    out(...args) {
+        var now = new Date();
+        console.log(`[${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}] ${args.join(" ")}`)
+        return true
+    }
+}
+
+var Settings = getFileObject(PathTo.Settings);
+
+function setPresence(e) {
+    if(Settings.discordRpc.enabled == false) {
+        return false;
+    }
+    if(Settings.discordRpc.enabled == false) {
+        e["largeImageKey"] = "icon_512";
+    }
+    client.updatePresence(e);
+    return true
+}
 
 if(require('electron-squirrel-startup')) app.quit();
-client.updatePresence({
+setPresence({
     state: "🔃 Starting app...",
     largeImageKey: 'icon_512',
     instance: true,
@@ -13,8 +53,8 @@ client.updatePresence({
 
 
 const createWindow = () => {
-    console.log("You launching this thru a terminal?? Damn well okay!")
-    console.log("Lets get started shall we?")
+    Logger.out("You launching this thru a terminal?? Damn well okay!")
+    Logger.out("Lets get started shall we?")
     const win = new BrowserWindow({
         width: 1000,
         height: 800,
@@ -23,23 +63,46 @@ const createWindow = () => {
             autoplayPolicy: false,
             webSecurity: false,
             nodeIntegration: true,
-            preload: path.join(app.getAppPath(), "preload.js"),
+            preload: path.join(app.getAppPath(), "src", "js", "preload.js"),
         }
     })
 
+    
     // win.setIcon("yt.png")
     var currentData = null
     win.setTitle("Initializing... - YouTube Music")
+    Logger.out("INIT life.koda.ytmusic");
     win.setMenuBarVisibility(false);
-    console.log("Loading... | "+`file://${__dirname}/src/index.html`)
+    win.webContents.on("did-navigate", e => {
+        var Url = e.sender.getURL()
+        Logger.out(`URL Changed to ${Url}`)
+    })
+    win.webContents.on("media-started-playing", e => {
+        Logger.out("Media state changed to playing, ordering discord rpc update")
+        win.webContents.send("discordRpcNow", true);
+    })
+    win.webContents.on("media-paused", e => {
+        Logger.out("Media state changed to paused, ordering discord rpc update")
+        win.webContents.send("discordRpcNow", true);
+    })
     win.once("ready-to-show", () => {
         win.show();
-        console.log("Done! No more normal outputs. Only verbose and errors")
+        Logger.out("Opening window as page is ready to show")
         ipcMain.on("injectReady", () => {
             win.webContents.send("inject", {settings: `file://${__dirname}/src/settings.html`});
         });
 
-        client.updatePresence({
+        ipcMain.on("loadSettings", () => {
+            win.webContents.send("loadSettings", Settings);
+        });
+
+        ipcMain.on("saveSettings", (event, settings) => {
+            fs.writeFileSync(PathTo.Settings, JSON.stringify(settings, null, 2))
+            Settings = getFileObject(PathTo.Settings)
+            win.webContents.send("saveSettings", true);
+        });
+
+        setPresence({
             state: "🔃 Connecting to YT Music...",
             largeImageKey: 'icon_512',
             instance: true,
@@ -47,7 +110,7 @@ const createWindow = () => {
         
         ipcMain.on("asynchronous-message", (event, playback) => {
             if(playback.metadata == null) {
-                client.updatePresence({
+                setPresence({
                     // details: '',
                     state: '🔇 Currently idle...',
                     largeImageKey: 'icon_512',
@@ -64,7 +127,7 @@ const createWindow = () => {
                         },
                         method: "POST"
                     }).then(e => {
-                        client.updatePresence({
+                        setPresence({
                             state: `${playback.metadata.artist}`,
                             details: `${playback.metadata.title}`,
                             largeImageKey: e.data.name,
@@ -74,7 +137,7 @@ const createWindow = () => {
                         })                            
                     })
                     .catch(ex => {
-                        client.updatePresence({
+                        setPresence({
                             state: `${playback.metadata.artist}`,
                             details: `${playback.metadata.title}`,
                             largeImageKey: 'icon_512',
@@ -94,7 +157,7 @@ const createWindow = () => {
                         method: "POST"
                     }).then(e => {
                         
-                        client.updatePresence({
+                        setPresence({
                             state: `${playback.metadata.artist}`,
                             details: `${playback.metadata.title}`,
                             largeImageKey: "icon_512",
@@ -103,7 +166,7 @@ const createWindow = () => {
                         })                            
                     })
                     .catch(ex => {
-                        client.updatePresence({
+                        setPresence({
                             state: `${playback.metadata.artist}`,
                             details: `${playback.metadata.title}`,
                             largeImageKey: "icon_512",
@@ -118,7 +181,7 @@ const createWindow = () => {
         });
     })
 
-    win.loadURL(`file://${__dirname}/src/index.html`)
+    win.loadURL(`file://${__dirname}/src/splash.html`)
 
     win.once("close", e => {
         win.webContents.send("signal-quit", {});
