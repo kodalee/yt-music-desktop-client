@@ -11,7 +11,7 @@
             <div class="center">
                 <div class="content-wrapper fadeOut">
                     <div>
-                        <img src="all_platform_logo_dark.svg" width="400" />
+                        <img src="img/all_platform_logo_dark.svg" width="400" />
                     </div>
                     <br>
                     <div class="preloader-wrapper small active">
@@ -36,43 +36,6 @@
             window.onload = function(){
                 $(".content-wrapper")[0].classList.remove("fadeOut")
             }
-            function appOpen() {
-                if($(".content-wrapper")[0].classList.contains("show-message")) {
-                    $(".content-wrapper")[0].classList.remove("show-message");
-                }
-                $("h4").html("");
-                $("p").html("");
-                $(".content-wrapper")[0].classList.add("fadeOut")
-                setInterval(() => {window.location = "https://music.youtube.com/";}, 1000);
-            }
-            function checkConnection(i, s) {
-                $.getJSON("https://koda.life/ping.php?i="+i, data => {
-                    console.log(data.integ)
-                    console.log(i)
-                    if(data.message == "pong" && data.integ == i) {
-                        appOpen();
-                    }
-                    else {
-                        if(s == true) {
-                            $(".content-wrapper")[0].classList.add("show-message");
-                            $("h4").html("Connecting...");
-                            $("p").html(`This is taking longer than expected.<br>Please ensure you have a working internet connection.<br><br><a class="waves-effect waves-light btn btn-primary" href="javascript:appOpen()">open anyway</a>`);
-                        }
-                    }
-                }).catch(ex => {
-                    if(s == true) {
-                        $(".content-wrapper")[0].classList.add("show-message");
-                        $("h4").html("Connecting...");
-                        $("p").html(`This is taking longer than expected.<br>Please ensure you have a working internet connection.<br><br><a class="waves-effect waves-light btn btn-primary" href="javascript:appOpen()">open anyway</a>`);
-                    }
-                })
-            }
-            setInterval(() => {
-                checkConnection(Math.floor(Math.random() * 120309992), true);
-            }, 7500)
-            setTimeout(() => {
-                checkConnection(Math.floor(Math.random() * 120309992), false);                
-            }, 2000);
         </script>
     </body>
 </html>

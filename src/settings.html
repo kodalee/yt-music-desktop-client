@@ -7,33 +7,32 @@
     </head>
     <body>
         <div class="logo-wrapper">
-            <img src="all_platform_logo_dark.svg" width="100" />
+            <img src="img/all_platform_logo_dark.svg" width="100" />
         </div>
         <div class="app">
-            <p class="red-text">There are currently no settings due to issues the client encountered during testing... This will be available soon.</p>
-            <p>
-                <label>
-                    <input type="checkbox" class="filled-in" id="discordRichPresence" disabled />
-                    <span>Discord Rich Presence (requires restart)</span>
-                </label>
-            </p>
-            <p>
-                <label>
-                    <input type="checkbox" class="filled-in" id="discordRichPresence_AlbumArtwork" disabled />
-                    <span>RPC: Show Album Artwork (may not work)</span>
-                </label>
-            </p>
-            <a class="waves-effect waves-light btn btn-primary" href="javascript:appOpen()">Save and Exit</a>
+            <div class="setting-box">
+                <h4>Discord RPC</h4>
+                <p>
+                    <label>
+                        <input type="checkbox" class="filled-in" id="discordRichPresence" />
+                        <span>Enabled (restart required)</span>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        <input type="checkbox" class="filled-in" id="discordRichPresence_AlbumArtwork" />
+                        <span>Show Album Artwork</span>
+                    </label>
+                </p>
+            </div>
+            <a class="waves-effect waves-light btn btn-primary" id="saveButton" href="javascript://">Save and Exit</a>
+            <p class="gray-text">Your settings are saved locally.</p>
         </div>
         <script type="text/javascript" src="js/materialize.min.js"></script>
         <script type="text/javascript" src="js/jquery.js"></script>
         <script>
             window.onload = function() {
                     document.body.style.opacity = 1;
-            }
-            function appOpen(){
-                document.body.style.opacity = 0;
-                setTimeout(() => {window.location = "settings.html"}, 1000)
             }
         </script>
     </body>
