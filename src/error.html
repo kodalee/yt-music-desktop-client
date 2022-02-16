@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Error - YouTube Music</title>
+        <link type="text/css" rel="stylesheet" href="css/settings.css" />
+        <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    </head>
+    <body>
+        <div class="logo-wrapper">
+            <img src="img/all_platform_logo_dark.svg" width="100" />
+        </div>
+        <div class="app center">
+            <h4>There was an unexpected error.</h4>
+            <p class="gray-text">Maybe reloading the application could fix the issue?</p>
+            <a class="waves-effect waves-light btn btn-primary" id="reloadButton" href="javascript://">Reload</a>
+        </div>
+        <script type="text/javascript" src="js/materialize.min.js"></script>
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script>
+            window.onload = function() {
+                    document.body.style.opacity = 1;
+            }
+        </script>
+    </body>
+</html>
