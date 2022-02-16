@@ -23,15 +23,16 @@ window.addEventListener("DOMContentLoaded", () => {
         ipcRenderer.send("loadSettings", 0)
     }
     else if(window.location.href.includes("splash.html")){
-        function appOpen() {
-            if(document.getElementsByClassName("content-wrapper")[0].classList.contains("show-message")) {
-                document.getElementsByClassName("content-wrapper")[0].classList.remove("show-message");
-            }
-            document.getElementsByTagName("h4")[0].innerHTML = "";
-            document.getElementsByTagName("p").innerHTML = "";
-            document.getElementsByClassName("content-wrapper")[0].classList.add("fadeOut")
-            setInterval(() => {window.location = "https://music.youtube.com/";}, 1000);
-        }
+            setInterval(() => {window.location = "https://music.youtube.com/?desktop=true&chromeless=0&dark=1&utm_medium=github";}, 3500);
+        // function appOpen() {
+        //     if(document.getElementsByClassName("content-wrapper")[0].classList.contains("show-message")) {
+        //         document.getElementsByClassName("content-wrapper")[0].classList.remove("show-message");
+        //     }
+        //     document.getElementsByTagName("h4")[0].innerHTML = "";
+        //     document.getElementsByTagName("p").innerHTML = "";
+        //     document.getElementsByClassName("content-wrapper")[0].classList.add("fadeOut")
+        //     setInterval(() => {window.location = "https://music.youtube.com/";}, 1000);
+        // }
 
         var notices = [
             {a: "Connecting", b: "Please wait..."},
@@ -67,14 +68,14 @@ window.addEventListener("DOMContentLoaded", () => {
                 tries++
             })
         }
-        setInterval(() => {
-            checkConnection(Math.floor(Math.random() * 120309992), true);
-        }, 7500)
-        setTimeout(() => {
-            checkConnection(Math.floor(Math.random() * 120309992), false);                
-        }, 2000);
+        // setInterval(() => {
+        //     checkConnection(Math.floor(Math.random() * 120309992), true);
+        // }, 7500)
+        // setTimeout(() => {
+        //     checkConnection(Math.floor(Math.random() * 120309992), false);                
+        // }, 2000);
 
-    } else {
+    } else if(window.location.href.includes("music.youtube")){
         ipcRenderer.on("signal-quit", () => {
             if(confirm("You are closing YT Music, are you sure? Clicking Cancel will prevent you from closing YT Music while something is playing until the next time YT Music starts.") == true) {
                 document.getElementsByTagName("video")[0].pause();
@@ -88,9 +89,24 @@ window.addEventListener("DOMContentLoaded", () => {
 
         ipcRenderer.send("injectReady", {})
         ipcRenderer.on("inject", (e, d) => {
+            var navs = document.getElementsByTagName("ytmusic-pivot-bar-item-renderer");
+
+            for(let i=0;i<navs.length;i++) {
+                var navt = navs[i]
+                navt.onclick = () => {
+                    document.getElementById("contents").style.transition = ".2s";
+                    document.getElementById("contents").style.transform = "translateY(500px)";
+                    document.getElementById("contents").style.opacity = 0;
+                    setTimeout(() => {
+                        document.getElementById("contents").style.transition = ".5s";
+                        document.getElementById("contents").style.transform = "translateY(0px)";
+                        document.getElementById("contents").style.opacity = 1;}, 1000)
+                }
+            }
+
             const para = document.createElement("ytmusic-pivot-bar-item-renderer");
-            para.classList.add("ytmusic-koda-settings")
-            para.innerHTML = `&nbsp;Settings&nbsp;`;
+            para.classList.add("ytmusic-koda-settings", "ytmusic-pivot-bar-renderer", "style-scope")
+            para.innerHTML = `Settings`;
             var settingsBtn = document.getElementsByTagName("ytmusic-pivot-bar-renderer")[0].appendChild(para)
     
             settingsBtn.onclick = () => {
@@ -149,5 +165,16 @@ window.addEventListener("DOMContentLoaded", () => {
             }
         }
         setInterval(send_discord_rpc, 5000)
+    }
+    else if(window.location.href.includes("error.html")) {
+        document.getElementById("reloadButton").onclick = () => {
+            window.location = "splash.html"
+        }
+    }
+    else {
+        ipcRenderer.send("injectReady", {})
+        ipcRenderer.on("inject", (e,d) => {
+            window.location = d.error
+        })
     }
 })

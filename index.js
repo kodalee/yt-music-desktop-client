@@ -1,17 +1,21 @@
-const { app, BrowserWindow, ipcMain, BrowserView, Menu } = require('electron')
+const { app, BrowserWindow, ipcMain, BrowserView, Menu, dialog } = require('electron')
 const client = require('discord-rich-presence')('942173523718324245')
 const axios = require('axios').default
 const path = require("path")
 const fs = require("fs")
 const { shell } = require('electron/common')
-const datafolder = path.join(process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share"), "YouTubeMusic");
+const appInfo = {
+    name: "ytmusic",
+    repo: "https://github.com/hellokoda/yt-music-client-desktop",
+    version: "1.0.3"
+}
+const datafolder = path.join(process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Preferences' : process.env.HOME + "/.local/share"), appInfo.name);
 var PathTo = {
     Settings: path.join(datafolder, "Settings.json")
 }
 var getFileObject = (file) => {
     return JSON.parse(fs.readFileSync(file, {encoding:'utf8', flag:'r'}))
 }
-
 if(!fs.existsSync(PathTo.Settings)) {
     fs.writeFileSync(PathTo.Settings, JSON.stringify({
         discordRpc: {
@@ -32,6 +36,8 @@ var Logger = {
 }
 
 var Settings = getFileObject(PathTo.Settings);
+
+Logger.out(`ytmusic version ${appInfo.version} starting...`)
 
 function setPresence(e) {
     if(Settings.discordRpc.enabled == false) {
@@ -70,6 +76,7 @@ const createWindow = () => {
     
     // win.setIcon("yt.png")
     var currentData = null
+    Logger.out("Checking for updates.")
     win.setTitle("Initializing... - YouTube Music")
     Logger.out("INIT life.koda.ytmusic");
     win.setMenuBarVisibility(false);
@@ -85,11 +92,14 @@ const createWindow = () => {
         Logger.out("Media state changed to paused, ordering discord rpc update")
         win.webContents.send("discordRpcNow", true);
     })
+    win.webContents.on("preload-error", () => {
+        win.loadURL(`file://${__dirname}/src/settings.html`)
+    })
     win.once("ready-to-show", () => {
         win.show();
         Logger.out("Opening window as page is ready to show")
         ipcMain.on("injectReady", () => {
-            win.webContents.send("inject", {settings: `file://${__dirname}/src/settings.html`});
+            win.webContents.send("inject", {settings: `file://${__dirname}/src/settings.html`, error: `file://${__dirname}/src/error.html`});
         });
 
         ipcMain.on("loadSettings", () => {
@@ -107,7 +117,36 @@ const createWindow = () => {
             largeImageKey: 'icon_512',
             instance: true,
         });
-        
+
+        axios({
+            url: `https://raw.githubusercontent.com/hellokoda/yt-music-desktop-client/main/UPDATE`,
+            method: "GET"
+        }).then(response => response.data).then(data => {
+            if(data.includes(`version=${appInfo.version}`)) {
+                Logger.out("Up to date!")
+            }
+            else {
+                Logger.out("Out of date, alerting user.")
+                var result = dialog.showMessageBoxSync(win, {
+                    type: "info",
+                    message: `There is a new version (${data.split("=")[1].replace("\n", "")}) of YouTube Music available for download!`,
+                    title: "New Update!",
+                    buttons: ["Update", "Ignore"]
+                })
+                switch (result) {
+                    case 0: {
+                        const { shell } = require("electron");
+                        shell.openExternal(`${appInfo.repo}/releases`);
+                        process.exit();
+                        break
+                    }
+                    case 1: {
+                        return
+                    }
+                }
+            }
+        })    
+
         ipcMain.on("asynchronous-message", (event, playback) => {
             if(playback.metadata == null) {
                 setPresence({
