@@ -1,8 +1,8 @@
 {
   "name": "ytmusic",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Desktop Application for YouTube Music",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "electron-forge start",
     "build": "electron-builder --x64",
@@ -31,11 +31,13 @@
     "electron": "^15.1.1"
   },
   "dependencies": {
+    "@cliqz/adblocker-electron": "^1.23.6",
     "axios": "^0.25.0",
     "custom-electron-titlebar": "^4.0.1",
     "discord-rich-presence": "0.0.8",
     "electron-build": "0.0.3",
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-web-blocker": "^1.0.5"
   },
   "build": {
     "win": {
@@ -45,6 +47,7 @@
     "appId": "life.koda.ytmusic",
     "files": [
       "src/**",
+      "modules/**",
       "index.js",
       "update.gif"
     ],
