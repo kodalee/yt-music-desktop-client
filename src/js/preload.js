@@ -4,6 +4,7 @@ const { ipcRenderer } = require("electron");
 window.addEventListener("DOMContentLoaded", () => {
     if(window.location.href.includes("settings.html")) {
         ipcRenderer.on("loadSettings", (event, settings) => {
+            document.getElementById("AdBlocker").checked = settings.AdBlocker.enabled
             document.getElementById("discordRichPresence").checked = settings.discordRpc.enabled
             document.getElementById("discordRichPresence_AlbumArtwork").checked = settings.discordRpc.albumArtwork
             document.getElementById("saveButton").onclick = () => {
@@ -11,6 +12,9 @@ window.addEventListener("DOMContentLoaded", () => {
                     "discordRpc": {
                         enabled: document.getElementById("discordRichPresence").checked,
                         albumArtwork: document.getElementById("discordRichPresence_AlbumArtwork").checked
+                    },
+                    "AdBlocker": {
+                        enabled: document.getElementById("AdBlocker").checked
                     }
                 }
                 ipcRenderer.send("saveSettings", structure)
@@ -170,6 +174,9 @@ window.addEventListener("DOMContentLoaded", () => {
         document.getElementById("reloadButton").onclick = () => {
             window.location = "splash.html"
         }
+    }
+    else if(window.location.href.includes("accounts.google")) {
+        return
     }
     else {
         ipcRenderer.send("injectReady", {})
