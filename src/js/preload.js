@@ -2,7 +2,23 @@ const { default: axios } = require("axios");
 const { ipcRenderer } = require("electron");
 
 window.addEventListener("DOMContentLoaded", () => {
-    if(window.location.href.includes("settings.html")) {
+    if(window.location.href.includes("release_of_liability.html")) {
+        ipcRenderer.on("loadSettings", (event, settings) => {
+            document.querySelector("#openSource").onclick = function() { require("electron").shell.openExternal("https://github.com/hellokoda/yt-music-desktop-client/")}
+            document.querySelector("#acceptBtn").onclick = function() {
+                settings["releaseOfLiabilityAccepted"] = true;
+                ipcRenderer.send("saveSettings", settings)
+                ipcRenderer.on("saveSettings", () => {
+                    window.location = "splash.html"
+                })
+            }
+            document.querySelector("#declineBtn").onclick = function() {
+                window.close()
+            }
+        })
+        ipcRenderer.send("loadSettings", 0)
+    }
+    else if(window.location.href.includes("settings.html")) {
         ipcRenderer.on("loadSettings", (event, settings) => {
             document.getElementById("AdBlocker").checked = settings.AdBlocker.enabled
             document.getElementById("discordRichPresence").checked = settings.discordRpc.enabled
@@ -27,7 +43,15 @@ window.addEventListener("DOMContentLoaded", () => {
         ipcRenderer.send("loadSettings", 0)
     }
     else if(window.location.href.includes("splash.html")){
-            setInterval(() => {window.location = "https://music.youtube.com/?desktop=true&chromeless=0&dark=1&utm_medium=github";}, 3500);
+        ipcRenderer.on("loadSettings", (event, settings) => {
+            if(settings.releaseOfLiabilityAccepted == false) {
+                setInterval(() => {window.location = "release_of_liability.html";}, 3500);
+            } else {
+                setInterval(() => {window.location = "https://music.youtube.com/?desktop=true&chromeless=0&dark=1&utm_medium=github";}, 3500);
+            }
+        })
+        ipcRenderer.send("loadSettings", 0)
+
         // function appOpen() {
         //     if(document.getElementsByClassName("content-wrapper")[0].classList.contains("show-message")) {
         //         document.getElementsByClassName("content-wrapper")[0].classList.remove("show-message");
