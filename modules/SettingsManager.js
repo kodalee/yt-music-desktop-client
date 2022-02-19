@@ -2,6 +2,7 @@ const fsys = require('./FileSystem.js');
 
 module.exports = {
     DEFAULT_SETTINGS: {
+        releaseOfLiabilityAccepted: false,
         discordRpc: {
             enabled: true,
             albumArtwork: true

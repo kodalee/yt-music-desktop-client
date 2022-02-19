@@ -8,6 +8,10 @@ body {
 .btn-primary {
     background: red!important;
 }
+.btn-secondary {
+    color: black!important;
+    background: white!important;
+}
 .flex-box {
     display: block;
     width: 100%;
