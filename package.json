@@ -47,6 +47,7 @@
     "appId": "life.koda.ytmusic",
     "files": [
       "src/**",
+      "modules/**",
       "index.js",
       "update.gif"
     ],

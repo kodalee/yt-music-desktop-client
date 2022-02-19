@@ -140,6 +140,26 @@ window.addEventListener("DOMContentLoaded", () => {
         })
 
         ipcRenderer.on("discordRpcNow", send_discord_rpc);
+        function get_video_duration() {
+            var dirty = document.querySelector(".time-info").innerText.split(" / ")
+            return {
+                len: dirty[1],
+                at: dirty[0]
+            }
+        }
+        function duration_to_seconds(dur) {
+            var split = dur.split(":")
+            var minutes = split[0]
+            var seconds = split[1]
+        
+            var duration = parseInt(seconds)
+            for (let i = 0; i<minutes; i++) {
+                duration = duration + 60
+            }
+        
+            return duration
+        }
+
         function send_discord_rpc() {
             var data = {}, lastSend = {}
             if(navigator.mediaSession.metadata == null) {
@@ -153,9 +173,14 @@ window.addEventListener("DOMContentLoaded", () => {
                 lastSend = data;
             }
             else {
+                var duration = get_video_duration()
                 data = {
                     playing: (navigator.mediaSession.playbackState == "playing"),
-                    duration: Math.floor(Date.now()) + Math.floor((document.getElementsByTagName("video")[0].duration - document.getElementsByTagName("video")[0].currentTime)*1000),
+                    duration: Math.floor(
+                        Date.now()) + Math.floor(
+                                (duration_to_seconds(duration.len) - duration_to_seconds(duration.at)
+                            )*1000
+                        ),
                     metadata: {
                         title: navigator.mediaSession.metadata.title,
                         artist: navigator.mediaSession.metadata.artist,
