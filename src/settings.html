@@ -24,6 +24,29 @@
                         <span>Show Album Artwork</span>
                     </label>
                 </p>
+                <div class="discord-preview-wrapper">
+                    <h6>PLAYING A GAME</h6>
+                    <img src="img/icon@512.png" artwork constant_update="true">
+                    <p app_name constant_update="true">YouTube Music</p>
+                    <p first_line constant_update="true"></p>
+                    <p second_line constant_update="true"></p>
+                    <p duration constant_update="true">2:21 left</p>
+                </div>
+                
+                <div class="input-field s6">
+                    <input id="discordRpc:look:first" type="text" class="validate">
+                    <label for="discordRpc:look:first">First Line</label>
+                </div>
+                <div class="input-field s6">
+                    <input id="discordRpc:look:second" type="text" class="validate">
+                    <label for="discordRpc:look:second">Second Line</label>
+                </div>
+                <p>
+                    <label>
+                        <input type="checkbox" class="filled-in" id="discordRpc:duration" />
+                        <span>Show Duration</span>
+                    </label>
+                </p>
             </div>
             <div class="setting-box">
                 <h4>Ad-Blocker</h4>
@@ -31,6 +54,20 @@
                     <label>
                         <input type="checkbox" class="filled-in" id="AdBlocker" />
                         <span>Enabled (restart required)</span>
+                    </label>
+                </p>
+            </div>
+            <div class="setting-box">
+                <h4>Personalization</h4>
+                <p>
+                    <label>
+                        <input type="checkbox" class="filled-in" id="personalization:font:enabled" />
+                        <span>Custom Font</span>
+                        <div class="input-field s6">
+                            <input id="personalization:font:family" type="text" class="validate">
+                            <label for="personalization:font:family">Font Family (Google Fonts)</label>
+                            <p id="font-preview-text">This is a preview on how your font will look</p>
+                        </div>
                     </label>
                 </p>
             </div>

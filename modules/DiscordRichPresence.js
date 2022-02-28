@@ -1,19 +1,52 @@
 const client = require('discord-rich-presence')('942173523718324245')
 const uploadAsset = require("./AssetHandler.js");
-const SettingsManager = require("./SettingsManager.js");
+const Logger = require('./Logger.js');
+const config = require("./SettingsManager.js").get();
 
 function set_presence(e) {
-    if(SettingsManager.get().discordRpc.enabled == false) {
+    if(config.discordRpc.enabled == false) {
         return false;
     }
-    if(SettingsManager.get().discordRpc.albumArtwork == false) {
+    if(config.discordRpc.albumArtwork == false) {
         e["largeImageKey"] = "icon_512";
     }
+
+    if(config.discordRpc.duration == false) {
+        delete e["endTimestamp"]
+    }
+
+
+    var status = e;
+    e["state"]
+    Logger.out(`[DiscordRP] UPDATE_CUSTOM_STATUS ${JSON.stringify(e)}`)
+
     client.updatePresence(e);
     return true
 }
+
+/**
+ * 
+ * @param {object} playback The playback object to extract metadata and player data from
+ * @param {string} input The string of text to have the placeholders applied to.
+ * @returns {string} The newly formatted string
+ */
+function ytm_placeholders(playback, input = "") {
+    if (input == "") {
+        input = "null"
+    }
+
+    input = input
+    .split("{artist}").join(playback.metadata.artist)
+    .split("{song}").join(playback.metadata.title)
+    .split("{at}").join(playback.rawDuration.at)
+    .split("{duration}").join(playback.rawDuration.len)
+
+    return input
+}
+
 module.exports = {
     set_presence: set_presence,
+    ytm_placeholders: ytm_placeholders,
     initalize() {
         set_presence({
             state: "🔃 Starting app...",
@@ -34,8 +67,8 @@ module.exports = {
             if(playback.playing == true) {
                 uploadAsset(playback.metadata.artwork).then(e => {
                     set_presence({
-                        state: `${playback.metadata.artist}`,
-                        details: `${playback.metadata.title}`,
+                        state: ytm_placeholders(playback, config.discordRpc.look.second),
+                        details: ytm_placeholders(playback, config.discordRpc.look.first),
                         largeImageKey: e.data.name,
                         smallImageKey: 'play',
                         endTimestamp: playback.duration,
@@ -44,8 +77,8 @@ module.exports = {
                 })
                 .catch(ex => {
                     set_presence({
-                        state: `${playback.metadata.artist}`,
-                        details: `${playback.metadata.title}`,
+                        state: ytm_placeholders(playback, config.discordRpc.look.second),
+                        details: ytm_placeholders(playback, config.discordRpc.look.first),
                         largeImageKey: 'icon_512',
                         smallImageKey: 'play',
                         endTimestamp: playback.duration,
@@ -56,8 +89,8 @@ module.exports = {
             else {
                 uploadAsset(playback.metadata.artwork).then(e => {
                     set_presence({
-                        state: `${playback.metadata.artist}`,
-                        details: `${playback.metadata.title}`,
+                        state: ytm_placeholders(playback, config.discordRpc.look.second),
+                        details: ytm_placeholders(playback, config.discordRpc.look.first),
                         largeImageKey: "icon_512",
                         smallImageKey: 'pause',
                         instance: true,
@@ -65,8 +98,8 @@ module.exports = {
                 })
                 .catch(ex => {
                     set_presence({
-                        state: `${playback.metadata.artist}`,
-                        details: `${playback.metadata.title}`,
+                        state: ytm_placeholders(playback, config.discordRpc.look.second),
+                        details: ytm_placeholders(playback, config.discordRpc.look.first),
                         largeImageKey: "icon_512",
                         smallImageKey: 'pause',
                         instance: true,

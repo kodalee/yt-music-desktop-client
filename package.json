@@ -1,12 +1,14 @@
 {
   "name": "ytmusic",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Desktop Application for YouTube Music",
   "main": "app.js",
   "scripts": {
     "start": "electron-forge start",
     "build": "electron-builder --x64",
-    "dispose": "node dispose.js"
+    "lin-build": "electron-builder --x64 -l",
+    "dispose": "node dispose.js",
+    "start_dt": "electron-forge start -- -- devtools"
   },
   "keywords": [
     "koda",
@@ -43,16 +45,20 @@
     "win": {
       "target": "squirrel"
     },
+    "linux": {
+      "target": "snap"
+    },
     "productName": "YouTube Music",
     "appId": "life.koda.ytmusic",
     "files": [
       "src/**",
       "modules/**",
-      "index.js",
+      "app.js",
       "update.gif"
     ],
     "directories": {
-      "buildResources": "."
+      "buildResources": "ytmusic",
+      "app": "./"
     },
     "squirrelWindows": {
       "loadingGif": "update.gif",
