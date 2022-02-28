@@ -18,8 +18,12 @@
         <script type="text/javascript" src="js/jquery.js"></script>
         <script>
             window.onload = function() {
-                    document.body.style.opacity = 1;
+                document.body.style.opacity = 1;
+                document.getElementById("reloadButton").onclick = () => {
+                    window.location = "splash.html"
+                }
             }
+
         </script>
     </body>
 </html>
