@@ -1,4 +1,7 @@
 <div id="top"></div>
+<div align="center">⚠⚠⚠ WARNING ⚠⚠⚠</div>
+<div align="center">This project is no longer being worked on, but it currently and should work smoothly in the future. If it don't work, I believe you can fix it on your own ♥</div>
+<br /><br />
 
 [![Contributors][contributors-shield]][contributors-url]
 [![Forks][forks-shield]][forks-url]
